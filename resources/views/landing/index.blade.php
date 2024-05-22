@@ -86,7 +86,7 @@ https://templatemo.com/tm-556-catalog-z
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-secondary d-flex" style="border-radius: 10px;" data-toggle="modal" data-target="#wishlistModal">
+        <button type="button" class="btn btn-secondary d-flex" style="border-radius: 10px;" data-toggle="modal" data-target="#wishlistModal" onclick="loadWishlist()">
             <span class="material-symbols-outlined">
                 credit_card_heart
             </span>
@@ -105,13 +105,13 @@ https://templatemo.com/tm-556-catalog-z
                     </button>
                 </div>
                 <div class="modal-body" id="wishlistModalBody">
-                    <ul id="wishlistItems">
+                    <ul id="wishlistItems" class="list-group">
                         <!-- Wishlist items will be displayed here -->
                     </ul>
                 </div>
-                                <div class="modal-footer">
+                <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button class="btn btn-success btn-add-to-chart" onclick="addAllToChart()">Add All to Chart</button>
+                    <button class="btn btn-success btn-add-to-chart" onclick="addAllToCart()">Add All to Cart</button>
                 </div>
             </div>
         </div>
@@ -192,10 +192,10 @@ https://templatemo.com/tm-556-catalog-z
                     <p>Price: Rp. {{ $data->price }}</p> 
                     <span class="tm-text-gray-light">{{ $data->created_at->format('d M Y') }}</span>
                 </div>
-                <button class="btn-sm btn btn-primary px-2 py-1">Wishlist</button>
+                <button class="btn-sm btn btn-primary px-2 py-1" onclick="addToWishlist({{ $data->id }})">Wishlist</button>
                 <a href="{{ route('landing.show', $data->id) }}">Detail Product</a>
             </div>
-        
+            
             <!-- Modal -->
             <div class="modal fade" id="productModal{{$data->id}}" tabindex="-1" role="dialog" aria-labelledby="productModal{{$data->id}}Label" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
@@ -605,6 +605,68 @@ function submitReview(productId) {
 
 {{-- wishlist js --}}
 
+<script>
+    function addToWishlist(productId) {
+        fetch('/wishlist', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                product_id: productId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                alert('Product added to wishlist');
+            } else {
+                alert('Failed to add product to wishlist');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function loadWishlist() {
+        fetch('/wishlist', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const wishlistItems = document.getElementById('wishlistItems');
+            wishlistItems.innerHTML = '';
+
+            data.forEach(item => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                li.innerHTML = `
+                    <div>
+                        <img src="${item.product.image1_url}" alt="${item.product.product_name}" style="width: 50px; height: 50px; object-fit: cover;">
+                        ${item.product.product_name}
+                    </div>
+                    <div>
+                        <button class="btn btn-danger btn-sm" onclick="removeFromWishlist(${item.id})">Remove</button>
+                    </div>
+                `;
+                wishlistItems.appendChild(li);
+            });
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function removeFromWishlist(id) {
+        // Implement the functionality to remove an item from the wishlist
+    }
+
+    function addAllToCart() {
+        // Implement the functionality to add all wishlist items to the cart
+    }
+</script>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
