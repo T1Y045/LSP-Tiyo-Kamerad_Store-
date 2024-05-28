@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Paymets;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 class PaymentController extends Controller
 {
     /**
@@ -11,8 +13,18 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        //
+        $payments = Paymets::all();
+        return view('bayar.index', compact('payments'));
     }
+
+    public function printpdf()
+    {
+        // Mengambil data pembayaran dari database
+        $payments = Paymets::all();
+
+        return view('bayar.report', compact('payments'));
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -57,8 +69,12 @@ class PaymentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $payment = Paymets::findOrFail($id);
+        $payment->delete();
+
+        return redirect()->route('bayar.index')->with('status', 'Data payment berhasil dihapus.');
     }
+
 }

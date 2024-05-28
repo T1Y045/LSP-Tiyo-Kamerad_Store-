@@ -12,24 +12,35 @@
 </head>
 <body>
     <div class="container">
-        <h2>Payment</h2>
-        <p>Order ID: {{ $paymentInfo['orderId'] }}</p>
-        <p>Total Amount: {{ $paymentInfo['totalAmount'] }}</p>
-    
-        <h3>Order Details</h3>
-        <ul>
-            @foreach ($paymentInfo['orderDetails'] as $detail)
-                <li class="d-flex align-items-center mb-3">
-                    <img src="{{ $detail->product->image1_url }}" alt="{{ $detail->product->product_name }}" style="width: 100px; height: auto; margin-right: 20px;">
-                    <div>
-                        <strong>Product:</strong> {{ $detail->product->product_name }}<br>
-                        <strong>Quantity:</strong> {{ $detail->quantity }}<br>
-                        <strong>Subtotal:</strong> {{ $detail->subtotal }}
-                    </div>
+        <div class="card mt-5">
+            <div class="card-body">
+              <h2 class="card-title">Payment</h2>
+              <p class="card-text">Order ID: {{ $paymentInfo['orderId'] }}</p>
+              <p class="card-text">Total Amount: Rp. {{ number_format($paymentInfo['totalAmount'], 2) }}</p>
+            </div>
+          
+            <div class="card-body">
+              <h3 class="card-title">Order Details</h3>
+              <ul class="list-group list-group-flush">
+                @foreach ($paymentInfo['orderDetails'] as $detail)
+                @php
+                  $discountedPrice = $detail->product->price;
+                  if ($detail->product->discount) {
+                    $discountedPrice = $detail->product->price - ($detail->product->price * ($detail->product->discount->percentage / 100));
+                  }
+                @endphp
+                <li class="list-group-item d-flex align-items-center">
+                  <img src="{{ $detail->product->image1_url }}" alt="{{ $detail->product->product_name }}" style="width: 100px; height: auto; margin-right: 20px;">
+                  <div>
+                    <strong>Product:</strong> {{ $detail->product->product_name }}<br>
+                    <strong>Quantity:</strong> {{ $detail->quantity }}<br>
+                    <strong>Subtotal:</strong> Rp. {{ number_format($discountedPrice * $detail->quantity, 2) }}
+                  </div>
                 </li>
-            @endforeach
-        </ul>
-    
+                @endforeach
+              </ul>
+            </div>
+          </div>    
         <form action="{{ route('processPayment') }}" method="POST" id="payment-form">
             @csrf
             <div class="form-group">
@@ -57,7 +68,7 @@
     
             paymentMethodSelect.addEventListener('change', function () {
                 if (this.value === 'midtrans') {
-                    payButton.textContent = 'Pay with Midtrans';
+                    payButton.textContent = 'Pay';
                     amountGroup.style.display = 'block';
                 } else {
                     payButton.textContent = 'Submit Payment';
@@ -131,7 +142,5 @@
             });
         });
     </script>
-        
-
-    </body>
+</body>
 </html>

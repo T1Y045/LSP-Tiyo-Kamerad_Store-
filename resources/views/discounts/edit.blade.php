@@ -141,6 +141,12 @@
         });
       }
     });
+
+    form.addEventListener('submit', function(e) {
+    e.preventDefault(); // Cegah default behavior
+    simpan(); // Panggil fungsi simpan()
+});
+
   </script>
 </body>
 

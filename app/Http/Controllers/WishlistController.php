@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Wishlist;
+use App\Models\Customers;
+use App\Models\Products;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -13,7 +15,13 @@ class WishlistController extends Controller
      */
     public function index()
     {
-        //
+        $wishlistItems = Wishlist::join('customers', 'wishlists.customer_id', '=', 'customers.id')
+            ->join('products', 'wishlists.product_id', '=', 'products.id')
+            ->select('wishlists.*', 'customers.name as customer_name', 'products.product_name as product_name')
+            ->get();
+
+        // Mengembalikan view dengan data wishlist
+        return view('wishlist.index', compact('wishlistItems'));
     }
 
     /**
@@ -68,8 +76,17 @@ class WishlistController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy($id)
+{
+    $wishlistItem = Wishlist::find($id);
+
+    if (!$wishlistItem) {
+        return response()->json(['success' => false, 'message' => 'Item not found'], 404);
     }
+
+    $wishlistItem->delete();
+
+    return response()->json(['success' => true]);
+}
+
 }

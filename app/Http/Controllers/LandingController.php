@@ -22,12 +22,17 @@ class LandingController extends Controller
      */
     public function index()
     {
-        
-        $product = Products::all();
+        // Ambil data produk beserta diskon
+        $products = Products::with('discount')->get();
+        // Ambil data wishlist
+        $wishlistitems = Wishlist::with('product')
+                                 ->where('customer_id', Auth::guard('customer')->id())
+                                 ->get();
 
-        return view("landing.index", compact('product'));
+        return view("landing.index", compact('products', 'wishlistitems'));
     }
 
+    
     public function about()
     {
         return view("landing.about");
@@ -43,6 +48,16 @@ class LandingController extends Controller
         return view("landing.video");
     }
 
+    public function getWishlist()
+{
+    $wishlistItems = Wishlist::with('product')
+                             ->where('customer_id', Auth::guard('customer')->id())
+                             ->get();
+
+    return response()->json($wishlistItems);
+}
+
+
 
 
     /**
@@ -52,6 +67,7 @@ class LandingController extends Controller
     {
         //
     }
+    
 
     public function addToCart(Request $request)
     {
@@ -63,13 +79,18 @@ class LandingController extends Controller
         if (isset($cart[$productId])) {
             $cart[$productId]['quantity'] += $quantity;
         } else {
-            $product = Products::find($productId);
+            $product = Products::with('discount')->find($productId);
             if ($product) {
+                $discountedPrice = $product->price;
+                if ($product->discount) {
+                    $discountedPrice = $product->price - ($product->price * ($product->discount->percentage / 100));
+                }
                 $cart[$productId] = [
                     "name" => $product->product_name,
                     "quantity" => $quantity,
-                    "price" => $product->price,
-                    "image" => $product->image1_url
+                    "price" => $discountedPrice,
+                    "image" => $product->image1_url,
+                    "discount" => $product->discount ? $product->discount->percentage : null
                 ];
             }
         }
@@ -77,13 +98,27 @@ class LandingController extends Controller
         Session::put('cart', $cart);
         return response()->json(['status' => 'success', 'cart' => $cart]);
     }
-        
+            
 
     public function getCart()
     {
         $cart = Session::get('cart', []);
         return response()->json(['cart' => $cart]);
     }
+
+    public function removeFromCart(Request $request)
+    {
+        $productId = $request->input('productId');
+        $cart = Session::get('cart', []);
+        
+        if (isset($cart[$productId])) {
+            unset($cart[$productId]);
+        }
+
+        Session::put('cart', $cart);
+        return response()->json(['status' => 'success', 'cart' => $cart]);
+    }
+
 
 
     /**
@@ -192,14 +227,22 @@ class LandingController extends Controller
             'status' => 'Pending',
         ]);
     
-        // Save order details
+        // Save order details and reduce stock
         foreach ($cart as $productId => $item) {
-            Orderdetails::create([
-                'order_id' => $order->id,
-                'product_id' => $productId,
-                'quantity' => $item['quantity'],
-                'subtotal' => $item['price'] * $item['quantity'],
-            ]);
+            $product = Products::find($productId);
+            if ($product) {
+                // Reduce stock
+                $product->stok_quantity -= $item['quantity'];
+                $product->save();
+    
+                // Create order detail
+                Orderdetails::create([
+                    'order_id' => $order->id,
+                    'product_id' => $productId,
+                    'quantity' => $item['quantity'],
+                    'subtotal' => $item['price'] * $item['quantity'],
+                ]);
+            }
         }
     
         // Save the order ID in session
@@ -207,7 +250,8 @@ class LandingController extends Controller
     
         return redirect()->route('payment');
     }
-
+    
+            
 public function payment()
 {
     $orderId = Session::get('order_id');

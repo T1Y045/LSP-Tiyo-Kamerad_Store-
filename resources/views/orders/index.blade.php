@@ -41,7 +41,6 @@
               <div class="card">
                 <div class="card-header card-header-primary">
                   <h4 class="card-title ">List Order</h4>
-                  <a href="{{route('orders.create')}}"><span class="card-category btn-sm btn btn-gradient-primary">+add new item</span></a>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
@@ -73,13 +72,13 @@
                             {{ $data->status }}
                           </td>
                           <td>
-                          <form id="deleteForm{{ $data->order_id }}" action="{{ route('orders.destroy', $data->order_id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            {{-- <a href="{{ route('orders.edit', $data->id) }}" class="btn-sm btn btn-primary">Edit</a> --}}
-                            <a href="" class="btn-sm btn btn-primary">Edit</a>
-                            <button type="button" onclick="confirmDelete('{{ $data->customer_name }}', {{ $data->order_id }})" class="btn-sm btn btn-danger">Delete</button>
-                        </form>
+                            <form id="deleteForm{{ $data->order_id }}" action="{{ route('orders.destroy', $data->order_id) }}" method="POST">
+                              @csrf
+                              @method('DELETE')
+                              <a href="{{ route('orders.edit', ['order' => $data->order_id]) }}" class="btn btn-sm btn-primary">Edit</a>
+                              <button type="button" onclick="confirmDelete('{{ $data->customer_name }}', {{ $data->order_id }})" class="btn-sm btn btn-danger">Delete</button>
+                              <a href="{{ route('deliveries.create') }}?order_id={{ $data->order_id }}" class="btn-sm btn btn-info">Deliveries</a>
+                          </form>              
                       </td>
                         </tr>
                         @endforeach

@@ -39,10 +39,10 @@ https://templatemo.com/tm-556-catalog-z
                     <a class="nav-link nav-link-1 text-light" aria-current="page" href="{{ route('landing.index') }}">Menu</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-link-2 text-light" href="{{ route('landing.video') }}">Videos</a>
+                    <a class="nav-link nav-link-2 active text-light" href="{{ route('landing.video') }}">Videos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-link-3 active text-light" href="{{ route('landing.about') }}">About</a>
+                    <a class="nav-link nav-link-3 text-light" href="{{ route('landing.about') }}">About</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link nav-link-4 text-light" href="{{ route('landing.contact') }}">Contact</a>
@@ -159,5 +159,6 @@ https://templatemo.com/tm-556-catalog-z
         $(window).on("load", function() {
             $('body').addClass('loaded');
         });
-    </script></body>
+    </script>
+    </body>
 </html>

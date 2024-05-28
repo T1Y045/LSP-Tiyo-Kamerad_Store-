@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Orders;
 use App\Models\Customers;
+use App\Models\Orderdetails;
+
 use Illuminate\Support\Facades\DB;
 class OrdersController extends Controller
 {
@@ -47,24 +49,38 @@ class OrdersController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $order = Orders::findOrFail($id);
+        return view('orders.edit', compact('order'));
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    
+    public function update(Request $request, $id)
     {
-        //
+        $order = Orders::findOrFail($id);
+        $order->update($request->all());
+    
+        return redirect()->route('orders.index')->with('success', 'Order updated successfully');
     }
+    
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        // Check if the order has related order details
+        if (Orderdetails::where('order_id', $id)->exists()) {
+            // Delete related order details first
+            Orderdetails::where('order_id', $id)->delete();
+        }
+    
+        // Now, delete the order
+        $order = Orders::findOrFail($id);
+        $order->delete();
+    
+        return redirect()->route('orders.index')->with('success', 'Order deleted successfully');
     }
+    
+    
 }

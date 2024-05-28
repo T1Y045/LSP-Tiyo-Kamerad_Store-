@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>
-    Customer List
+    Payment
   </title>
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
   <!--     Fonts and icons     -->
@@ -30,7 +30,7 @@
 
     <div class="main-panel">
       <!-- Navbar -->
-      @section('page-title', 'Customer List')
+      @section('page-title', 'Payment')
       @section('main')
           @include('dashboard.main')
       <!-- End Navbar -->
@@ -40,62 +40,34 @@
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header card-header-primary">
-                  <h4 class="card-title ">Customer List</h4>
+                  <h4 class="card-title ">List Payment</h4>
+                  <a href="{{ route('printpdf') }}"><span class="card-category btn-sm btn btn-gradient-primary">PRINT PDF</span></a>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
                     <table class="table">
                       <thead class=" text-primary">
                         <th>NO.</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Password</th>
-                        <th>Phone</th>
-                        <th>Address1</th>
-                        <th>Address2</th>
-                        <th>Address3</th>
-                        <th class="text-center">Control</th>
+                        <th>Order ID</th>
+                        <th>Payment Date</th>
+                        <th>Payment Method</th>
+                        <th>Control</th>
                       </thead>
                       <tbody>
-                        @foreach ($customer as $idx => $data)
+                        @foreach ($payments as $idx => $data)
                         <tr>
+                            <td>{{ $idx + 1 }}</td>
+                            <td>{{ $data->order_id }}</td>
+                            <td>{{ $data->payment_date }}</td>
+                            <td>{{ $data->payment_method }}</td>
+                            <td>{{ $data->amount }}</td>
                           <td>
-                            {{ $idx + 1 . " . " }}
-                          </td>
-                          <td>
-                            {{ $data->name }}
-                          </td>
-                          <td>
-                            {{ $data->email }}
-                          </td>
-                          @if (strlen($data->password) > 8)
-                          <td data-bs-toggle="tooltip" data-bs-placement="right"
-                          data-bs-custom-class="custom-tooltip"
-                          data-bs-title="{{ $data->password }}" style="cursor: help;">
-                            {{ substr($data->password, 0, 8) . '...' }}
-                          </td>
-                          @else
-                          <td>{{ $data->password }}</td>
-                          @endif
-                          <td>
-                            {{ $data->phone }}
-                          </td>
-                          <td>
-                            {{ $data->address1 }}
-                          </td>
-                          <td>
-                            {{ $data->address2 }}
-                          </td>
-                          <td>
-                            {{ $data->address3 }}
-                          </td>
-                          <td class="align-middle text-center text-sm">
-                            <form action="{{ route('customer.destroy', $data->id) }}" method="post" id="frmDelete{{ $data->id }}">
-                            @csrf
-                            @method('DELETE')
+                            <form id="deleteForm{{ $data->id }}" action="{{ route('bayar.destroy', $data->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <a href="#" onclick="confirmDelete('{{ $data->id }}')" class="btn-sm btn btn-danger">Delete</a>
                             </form>
-                            <a href="#" onclick="confirmDelete('{{ $data->name }}', {{ $data->id }})" class="btn-sm btn btn-danger">Delete</a>
-                        </td>
+                            </td>
                         </tr>
                         @endforeach
                       </tbody>
@@ -166,20 +138,18 @@
       pesanSimpan();
     };
   </script>
-  <script>
-    function confirmDelete(name, nameId) {
+<script>
+    function confirmDelete(paymentId) {
         Swal.fire({
             title: 'Are you sure?',
-            text: 'You are about to delete ' + name + '. This action cannot be undone!',
+            text: 'You are about to delete this payment data. This action cannot be undone.',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Jika pengguna mengklik 'Yes', submit form untuk menghapus data
-                document.getElementById('frmDelete' + nameId).submit();
+                document.getElementById('deleteForm' + paymentId).submit();
             }
         });
     }

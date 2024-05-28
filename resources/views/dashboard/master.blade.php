@@ -42,6 +42,18 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+
+  <style>
+    .bg-primary {
+      border-radius: 0.35rem; /* Adjust the value as needed */
+    }
+  </style>
+
+<style>
+  * {
+    scrollbar-color: rgba(24, 50, 92, 0.5) rgba(24, 50, 92, 0.5);
+  }
+  </style>
   <link rel="stylesheet" href="https://lipis.github.io/bootstrap-sweetalert/dist/sweetalert.css">
   <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -318,6 +330,8 @@ md.initDashboardPageCharts();
         transform: scale(2);
       }
    </style>
+
+   
 
 
 {{-- nav color change  --}}

@@ -15,4 +15,10 @@ class Discounts extends Model
         'end_date',
         'percentage'
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Products::class, 'product_id');
+    }
+
 }

@@ -21,4 +21,10 @@ class Products extends Model
         'image5_url',
     ];
 
+    public function discount()
+    {
+        return $this->hasOne(Discounts::class, 'product_id');
+    }
+
+
 }

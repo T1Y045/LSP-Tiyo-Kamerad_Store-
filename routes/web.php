@@ -20,22 +20,28 @@ Route::get('/about', [\App\Http\Controllers\LandingController::class, 'about'])-
 Route::get('/video', [\App\Http\Controllers\LandingController::class, 'video'])->name('landing.video');
 Route::get('/contact', [\App\Http\Controllers\LandingController::class, 'contact'])->name('landing.contact');
 Route::get('/', [\App\Http\Controllers\LandingController::class, 'index'])->name('landing.index');
+Route::get('/contact', [\App\Http\Controllers\LandingController::class, 'contact'])->name('landing.contact');
+
+Route::get('/invoice', [\App\Http\Controllers\InvoiceController::class, 'show'])->name('landing.invoice');
+Route::get('/cancel-order/{orderId}', [\App\Http\Controllers\InvoiceController::class, 'cancelOrder'])->name('cancel.order');
+
+
 
 
 Route::get('/product_detail/{id}', [App\Http\Controllers\LandingController::class, 'show'])->name('landing.show');
 Route::post('/add-to-cart', [App\Http\Controllers\LandingController::class, 'addToCart'])->name('add_to_cart');
 Route::get('/get-cart', [App\Http\Controllers\LandingController::class, 'getCart'])->name('get_cart');
+Route::post('/remove-from-cart', [App\Http\Controllers\LandingController::class, 'removeFromCart'])->name('remove_from_cart');
 Route::post('/checkout', [App\Http\Controllers\LandingController::class, 'checkout'])->name('checkout');
 Route::get('/payment', [App\Http\Controllers\LandingController::class, 'payment'])->name('payment');
 Route::post('/process-payment', [App\Http\Controllers\LandingController::class, 'processPayment'])->name('processPayment');
 Route::post('/reviews', [App\Http\Controllers\LandingController::class, 'store'])->name('reviews.store');
 route::get('/success',[App\Http\Controllers\LandingController::class, 'success'])->name('success');
 route::post('/wishlist',[App\Http\Controllers\LandingController::class, 'wishlist'])->name('wishlist');
-Route::get('/get_wishlist', [App\Http\Controllers\LandingController::class, 'get_wishlist'])->name('get_wishlist');
+Route::get('/wishlist-get', [App\Http\Controllers\LandingController::class, 'getWishlist'])->name('get.wishlist');
 route::post('/remove_wishlist',[App\Http\Controllers\LandingController::class, 'remove_wishlist'])->name('remove_wishlist');
-route::post('/addchart',[App\Http\Controllers\LandingController::class, 'addchart'])->name('addchart');
-Route::get('/wishlist', [App\Http\Controllers\LandingController::class, 'getWishlist'])->name('get.wishlist');
 Route::post('/wishlist', [App\Http\Controllers\WishlistController::class, 'store'])->name('wishlist.store');
+Route::delete('/wishlist/{id}', [App\Http\Controllers\WishlistController::class, 'destroy'])->name('wishlist.destroy');
 });
 
 
@@ -51,6 +57,10 @@ Route::resource('discounts', \App\Http\Controllers\DiscountController::class);
 Route::resource('orders', \App\Http\Controllers\OrdersController::class);
 Route::resource('review', \App\Http\Controllers\ReviewController::class);
 Route::resource('products', \App\Http\Controllers\ProductsController::class);
+Route::resource('deliveries', \App\Http\Controllers\DeliveriesController::class);
+Route::resource('bayar', \App\Http\Controllers\PaymentController::class);
+Route::get('/bayar/print-pdf', [App\Http\Controllers\PaymentController::class, 'printpdf'])->name('printpdf');
+Route::get('/wishlisti', [App\Http\Controllers\WishlistController::class, 'index'])->name('wishlisti.index');
 });
 
 // Route::post('/cart/add/{id}', [App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
