@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="../../assets/css/templatemo-style.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
 
     <style>
         .rating {
@@ -56,12 +58,37 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg bg-danger">
-    <div class="container-fluid">
-        <a class="navbar-brand text-light" href="#">
-            <i><img src="../../assets/img/logo.png" alt="" style="width: 50px; height: 50px;"></i>
-            Kamerad Store ☭
+    <header>
+        <!-- Jumbotron -->
+<div class="p-3 text-center bg-muted border-bottom">
+  <div class="container-fluid">
+    <div class="row align-items-center gy-3">
+      <!-- Left elements -->
+      <div class="col-lg-4 col-sm-4 col-4 ">
+        <a href="https://mdbootstrap.com/" target="_blank" class="text-primary fw-bold text-xl-start fs-4 float-start">
+          <img src="../../assets/img/logo.png" style="width: 50px; height: 50px;"/>
+          Kamerad Store ☭
         </a>
+      </div>
+      <!-- Left elements -->
+
+    </div>
+  </div>
+</div>
+<!-- Jumbotron -->
+
+  </header>
+  <nav class="navbar navbar-expand-lg bg-primary">
+      <div class="container-fluid">
+
+          <h6 class="mb-0 navbar-brand text-light">
+              <a href="{{ route('landing.index') }}" class="text-white-50">Home</a>
+              <span class="text-white-50 mx-2"> > </span>
+              <a href="" class="text-white-50">Product Detail</a>
+              {{-- <span class="text-white-50 mx-2"> > </span>
+              <a href="" class="text-white"><u>Data</u></a> --}}
+            </h6>
+
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <i class="fas fa-bars"></i>
         </button>
@@ -106,35 +133,82 @@
     </div>
 </nav>
 
+
 <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll"><img style="width: 100%; height: 300px;" src="../../assets/img/bglan.jpg" alt=""></div>
 
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-6">
-                <img class="card-img-top mb-5 mb-md-0" src="{{ asset($pd->image1_url) }}" alt="{{ $pd->product_name }}" />
-            </div>
-            <div class="col-md-6">
-                <h1 class="display-5 fw-bolder">{{ $pd->product_name }}</h1>
-                <div class="fs-5 mb-5">
-                    @php
-                        $discount = $pd->discount;
-                        $discountedPrice = $pd->price;
-                    @endphp
-                    @if ($discount)
-                        @php
-                            $discountedPrice = $pd->price - ($pd->price * ($discount->percentage / 100));
-                        @endphp
-                        <p class="card-text">Price: <span style="color: #262626;">Rp. <s>{{ $pd->price }}</s> <strong>{{ $discountedPrice }}</strong></span></p>
-                    @else
-                        <p class="card-text">Price: <span style="color: #262626;">Rp. {{ $pd->price }}</span></p>
-                    @endif
+            <aside class="col-lg-6">
+                <div class="border rounded-4 mb-3 d-flex justify-content-center">
+                    <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="{{ asset($pd->image1_url) }}">
+                        <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="rounded-4 fit" src="{{ asset($pd->image1_url) }}" />
+                    </a>
                 </div>
-                <p class="lead">{{ $pd->description }}</p>
-            </div>
+                <div class="d-flex justify-content-center mb-3">
+                    <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="{{ asset($pd->image2_url) }}" class="item-thumb">
+                        <img width="60" height="60" class="rounded-2" src="{{ asset($pd->image2_url) }}" />
+                    </a>
+                    <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="{{ asset($pd->image3_url) }}" class="item-thumb">
+                        <img width="60" height="60" class="rounded-2" src="{{ asset($pd->image3_url) }}" />
+                    </a>
+                    <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="{{ asset($pd->image4_url) }}" class="item-thumb">
+                        <img width="60" height="60" class="rounded-2" src="{{ asset($pd->image4_url) }}" />
+                    </a>
+                    <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="{{ asset($pd->image5_url) }}" class="item-thumb">
+                        <img width="60" height="60" class="rounded-2" src="{{ asset($pd->image5_url) }}" />
+                    </a>
+                </div>
+                <!-- thumbs-wrap.// -->
+                <!-- gallery-wrap .end// -->
+            </aside>
+            <main class="col-lg-6">
+                <div class="ps-lg-3">
+                    <h1 class="display-5 fw-bolder">{{ $pd->product_name }}</h1>
+                    <div class="fs-5 mb-5">
+                        @php
+                            $discount = $pd->discount;
+                            $discountedPrice = $pd->price;
+                        @endphp
+                        @if ($discount)
+                            @php
+                                $discountedPrice = $pd->price - ($pd->price * ($discount->percentage / 100));
+                            @endphp
+                            <p class="card-text">Price: <span style="color: #262626;">Rp. <s>{{ $pd->price }}</s> <strong>{{ $discountedPrice }}</strong></span></p>
+                        @else
+                            <p class="card-text">Price: <span style="color: #262626;">Rp. {{ $pd->price }}</span></p>
+                        @endif
+                    </div>
+                    <p class="lead">{{ $pd->description }}</p>
+
+                    <div class="row mb-4">
+                        <div class="col-md-4 col-6">
+                            <label class="mb-2">Category</label>
+                            <div class="input-group mb-3" style="width: 170px;">
+                                <input type="text" class="form-control text-center border border-secondary" value="{{ $pd->category->category_name }}" aria-label="Example text with button addon" aria-describedby="button-addon1" readonly />
+                            </div>
+                        </div>
+                        <!-- col.// -->
+                        <div class="col-md-4 col-6 mb-3">
+                            <label class="mb-2 d-block">Quantity</label>
+                            <div class="input-group mb-3" style="width: 170px;">
+                                <input type="text" class="form-control text-center border border-secondary" value="{{ $pd->stok_quantity }}" aria-label="Example text with button addon" aria-describedby="button-addon1" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ route('landing.index') }}" class="btn btn-warning shadow-0">Back to Checkout</a>
+                    <a href="#" class="btn btn-primary shadow-0" onclick="addToCart({{ $pd->id }}, 1)">
+                        <i class="me-1 fa fa-shopping-basket"></i> Add to cart
+                    </a>
+                    <a href="#" class="btn btn-light border border-secondary py-2 icon-hover px-3" onclick="addToWishlist({{ $pd->id }})">
+                        <i class="me-1 fa fa-heart fa-lg"></i> Wishlist
+                    </a>
+                </div>
+            </main>
         </div>
     </div>
 </section>
+
 
 <div class="container mb-5">
 	<h2 class="text-center">Reviews</h2>
@@ -142,14 +216,14 @@
         <p>No reviews available.</p>
     @else
 
-	<div class="card">
-	    <div class="card-body">
-	        <div class="row">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
                 @foreach ($reviews as $review)
-        	    <div class="col-md-2">
-        	        <img src="https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg" class="img img-rounded img-fluid"/>
-        	        <p class="text-secondary text-center">{{ $review->created_at->format('d M Y') }}</p>
-        	    </div>
+                <div class="col-md-2">
+                    <img src="https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg" class="img img-rounded img-fluid"/>
+                    <p class="text-secondary text-center">{{ $review->created_at->format('d M Y') }}</p>
+                </div>
                 <div class="col-md-10">
                     <p>
                         <a class="float-left" href="https://maniruzzaman-akash.blogspot.com/p/contact.html"><strong>{{ $review->customer_name }}</strong></a>
@@ -163,7 +237,14 @@
                     </p>
                     <div class="clearfix"></div>
                     <p>{{ $review->comment }}</p>
-                </div>                
+                    @if(Auth::guard('customer')->check() && Auth::guard('customer')->user()->id === $review->customer_id)
+                        <form action="{{ route('reviews.coremove', $review->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-secondary">Delete Comment</button>
+                        </form>
+                    @endif
+                </div>
                 @endforeach
                 <hr>
                 <form action="{{ route('reviews.store') }}" method="POST" id="reviewForm{{$pd->id}}">
@@ -185,9 +266,10 @@
                     <button type="submit" class="px-2 py-1 btn btn-primary">Submit Review</button>
                 </form>                
                 <a class="text-primary mt-4" href="{{ route('landing.index') }}">Go back to menu</a>
-	        </div>
-	    </div>
-	</div>
+            </div>
+        </div>
+    </div>
+    
 </div>
 @endif
 
@@ -267,8 +349,96 @@
     }
 </script>
 
+{{-- add to chart js --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+// JavaScript code to add product to cart
+function addToCart(productId, quantity) {
+    // Kirim permintaan AJAX ke route 'add_to_cart'
+    fetch('{{ route("add_to_cart") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+        },
+        body: JSON.stringify({ productId: productId, quantity: quantity }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // SweetAlert untuk memberikan notifikasi sukses
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Product added to cart successfully!',
+            }).then(() => {
+                // Refresh halaman atau lakukan tindakan lain sesuai kebutuhan Anda
+                window.location.reload();
+            });
+        } else {
+            // SweetAlert untuk memberikan notifikasi gagal
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Failed to add product to cart.',
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // SweetAlert untuk memberikan notifikasi error
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'An error occurred while adding product to cart.',
+        });
+    });
+}
 </script>
 
-    
+{{-- wishlist add js --}}
+
+<script>
+function addToWishlist(productId) {
+    fetch('{{ route("wishlist.store") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+        },
+        body: JSON.stringify({ product_id: productId }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Product added to wishlist successfully!',
+            }).then(() => {
+                // Refresh halaman atau lakukan tindakan lain sesuai kebutuhan Anda
+                window.location.reload();
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Failed to add product to wishlist.',
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'An error occurred while adding product to wishlist.',
+        });
+    });
+}
+
+</script>
+
 
 </body>

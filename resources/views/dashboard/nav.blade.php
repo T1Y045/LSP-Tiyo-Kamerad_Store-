@@ -5,7 +5,7 @@
 <div class="sidebar-wrapper">
   <ul class="nav">
     <li class="nav-item  ">
-      <a class="nav-link" href="{{route('dashboard.index')}}">
+      <a class="nav-link" href="{{route('dashboard.chart')}}">
         <i class="material-icons">dashboard</i>
         <p class="text-white">Dashboard</p>
       </a>
@@ -76,6 +76,24 @@
         <p class="text-white">Review</p>
       </a>
     </li>
+    <li class="nav-item ">
+      <a class="nav-link" href="{{route('distributor.index')}}" onclick="highlightNavItem(this)">
+        <i class="material-icons">support_agent</i>
+        <p class="text-white">Distributor</p>
+      </a>
+    </li>
+    <li class="nav-item ">
+      <a class="nav-link" href="{{route('purchase_item.index')}}" onclick="highlightNavItem(this)">
+        <i class="material-icons">place_item</i>
+        <p class="text-white">Purchase Order Items</p>
+      </a>
+    </li>
+    <li class="nav-item ">
+      <a class="nav-link" href="{{route('purchase.index')}}" onclick="highlightNavItem(this)">
+        <i class="material-icons">shop_two</i>
+        <p class="text-white">Purchase Order</p>
+      </a>
+    </li>
   </ul>
 </div>
 <!-- Focusing when on load and active color -->
@@ -99,8 +117,3 @@
 
   window.addEventListener("load", markActiveLinkAndScroll);
 </script>
-<style>
-* {
-  scrollbar-color: rgba(24, 50, 92, 0.5) rgba(24, 50, 92, 0.5);
-}
-</style>

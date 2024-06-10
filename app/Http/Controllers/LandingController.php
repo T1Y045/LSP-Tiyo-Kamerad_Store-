@@ -20,18 +20,28 @@ class LandingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         // Ambil data produk beserta diskon
-        $products = Products::with('discount')->get();
+        $productsQuery = Products::with('discount');
+    
+        // Logika untuk menyortir berdasarkan harga terendah atau tertinggi
+        if ($request->sort == 'asc') {
+            $productsQuery->orderBy('price');
+        } elseif ($request->sort == 'desc') {
+            $productsQuery->orderByDesc('price');
+        }
+    
+        $products = $productsQuery->paginate(6);
+    
         // Ambil data wishlist
         $wishlistitems = Wishlist::with('product')
                                  ->where('customer_id', Auth::guard('customer')->id())
                                  ->get();
-
+    
         return view("landing.index", compact('products', 'wishlistitems'));
     }
-
+    
     
     public function about()
     {
@@ -49,14 +59,16 @@ class LandingController extends Controller
     }
 
     public function getWishlist()
-{
+    {
     $wishlistItems = Wishlist::with('product')
                              ->where('customer_id', Auth::guard('customer')->id())
                              ->get();
 
     return response()->json($wishlistItems);
-}
+    }
 
+
+    
 
 
 
@@ -146,6 +158,19 @@ class LandingController extends Controller
         }
     }
 
+    public function coremove($id)
+    {
+        $review = ProductReview::findOrFail($id);
+
+        if (Auth::guard('customer')->check() && Auth::guard('customer')->user()->id === $review->customer_id) {
+            $review->delete();
+            return redirect()->back()->with('success', 'Review deleted successfully');
+        } else {
+            return redirect()->back()->with('error', 'You are not authorized to delete this review');
+        }
+    }
+
+
     
 
     /**
@@ -153,24 +178,24 @@ class LandingController extends Controller
      */
     public function show($id)
     {
-        $pd = Products::find($id);
-    
+        // Menggunakan Eloquent untuk melakukan join antara Products dan Productcategories
+        $pd = Products::with('category')->find($id);
+        
         if (!$pd) {
             abort(404); // Jika produk tidak ditemukan, tampilkan halaman 404
         }
-
+    
         $reviews = ProductReview::where('product_id', $id)->get();
-
-
+    
         foreach ($reviews as $review) {
             $customer = Customers::find($review->customer_id);
             $review->customer_name = $customer ? $customer->name : 'Unknown';
         }
     
-        // Kirim data produk dan ulasan-ulasannya ke view
+        // Kirim data produk, kategori, dan ulasan-ulasannya ke view
         return view('landing.product_detail', compact('pd', 'reviews'));
-    
     }
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -219,6 +244,21 @@ class LandingController extends Controller
             $totalAmount += $item['price'] * $item['quantity'];
         }
     
+        // Calculate shipping cost
+        $shippingCost = 0;
+        switch ($request->input('shipping_method')) {
+            case 'standard':
+                $shippingCost = 20000;
+                break;
+            case 'express':
+                $shippingCost = 50000;
+                break;
+            default:
+                $shippingCost = 0;
+        }
+    
+        $totalAmount += $shippingCost;
+    
         // Create the order
         $order = Orders::create([
             'customer_id' => Auth::guard('customer')->user()->id,
@@ -251,55 +291,54 @@ class LandingController extends Controller
         return redirect()->route('payment');
     }
     
-            
-public function payment()
-{
-    $orderId = Session::get('order_id');
-    if (!$orderId) {
-        return redirect()->route('landing.index')->with('error', 'No order found for payment.');
+    public function payment()
+    {
+        $orderId = Session::get('order_id');
+        if (!$orderId) {
+            return redirect()->route('landing.index')->with('error', 'No order found for payment.');
+        }
+    
+        $order = Orders::with('orderDetails.product')->find($orderId);
+        if (!$order) {
+            return redirect()->route('landing.index')->with('error', 'Order not found.');
+        }
+    
+        $totalAmount = $order->total_amount;
+        $customer = Auth::guard('customer')->user();
+    
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = config('midtrans.server_key');
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        \Midtrans\Config::$isProduction = false;
+        // Set sanitization on (default)
+        \Midtrans\Config::$isSanitized = true;
+        // Set 3DS transaction for credit card to true
+        \Midtrans\Config::$is3ds = true;
+    
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => $orderId,
+                'gross_amount' => $totalAmount,
+            ),
+            'customer_details' => array(
+                'first_name' => $customer->name,
+                'email' => $customer->email,
+                'phone' => $customer->phone,
+            ),
+        );
+    
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
+    
+        $paymentInfo = [
+            'orderId' => $orderId,
+            'totalAmount' => $order->total_amount,
+            'status' => 'Pending',
+            'orderDetails' => $order->orderDetails,
+        ];
+    
+        return view('landing.payment', compact('paymentInfo', 'snapToken', 'order'));
     }
-
-    $order = Orders::with('orderDetails.product')->find($orderId);
-    if (!$order) {
-        return redirect()->route('landing.index')->with('error', 'Order not found.');
-    }
-
-    $totalAmount = $order->total_amount;
-    $customer = Auth::guard('customer')->user();
-
-    // Set your Merchant Server Key
-    \Midtrans\Config::$serverKey = config('midtrans.server_key');
-    // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-    \Midtrans\Config::$isProduction = false;
-    // Set sanitization on (default)
-    \Midtrans\Config::$isSanitized = true;
-    // Set 3DS transaction for credit card to true
-    \Midtrans\Config::$is3ds = true;
-
-    $params = array(
-        'transaction_details' => array(
-            'order_id' => $orderId,
-            'gross_amount' => $totalAmount,
-        ),
-        'customer_details' => array(
-            'first_name' => $customer->name,
-            'email' => $customer->email,
-            'phone' => $customer->phone,
-        ),
-    );
-
-    $snapToken = \Midtrans\Snap::getSnapToken($params);
-
-    $paymentInfo = [
-        'orderId' => $orderId,
-        'totalAmount' => $order->total_amount,
-        'status' => 'Pending',
-        'orderDetails' => $order->orderDetails,
-    ];
-
-    return view('landing.payment', compact('paymentInfo', 'snapToken', 'order'));
-}
-
+        
 
 
 

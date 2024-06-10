@@ -26,5 +26,8 @@ class Products extends Model
         return $this->hasOne(Discounts::class, 'product_id');
     }
 
-
+    public function category()
+    {
+        return $this->belongsTo(Productcategories::class, 'product_category_id');
+    }
 }

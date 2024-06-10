@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Paymets;
+use Illuminate\Support\Facades\View;
+use App\Models\purchaseorderitems;
+use App\Models\purchaseorder;
+
 use Dompdf\Dompdf;
 use Dompdf\Options;
 class PaymentController extends Controller
@@ -17,14 +21,46 @@ class PaymentController extends Controller
         return view('bayar.index', compact('payments'));
     }
 
-    public function printpdf()
+    public function generatePDF(Request $request)
     {
-        // Mengambil data pembayaran dari database
-        $payments = Paymets::all();
-
-        return view('bayar.report', compact('payments'));
+        $year = $request->input('year');
+        $month = $request->input('month');
+    
+        $paymentsQuery = Paymets::query();
+        if ($year && $month) {
+            $paymentsQuery->whereYear('payment_date', $year)->whereMonth('payment_date', $month);
+        }
+        $payments = $paymentsQuery->get();
+    
+        $purchaseOrdersQuery = PurchaseOrderItems::query();
+        if ($year && $month) {
+            $purchaseOrdersQuery->whereYear('created_at', $year)->whereMonth('created_at', $month);
+        }
+        $purchaseOrders = $purchaseOrdersQuery->get();
+    
+        // Calculate total purchase amount
+        $purchaseTotal = 0;
+        foreach ($purchaseOrders as $purchaseOrder) {
+            $purchaseTotal += $purchaseOrder->price * $purchaseOrder->quantity;
+        }
+    
+        // Load view
+        $pdf = new Dompdf();
+        $pdf->loadHtml(View::make('bayar.pdf', compact('payments', 'purchaseOrders', 'purchaseTotal')));
+    
+        // (Optional) Set paper size and orientation
+        $pdf->setPaper('A4', 'portrait');
+    
+        // Render PDF (optional, depends on your needs)
+        $pdf->render();
+    
+        // Output PDF to browser
+        return $pdf->stream('payments.pdf');
     }
-
+    
+    
+    
+                
 
     /**
      * Show the form for creating a new resource.

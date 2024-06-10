@@ -6,5 +6,6 @@
 @section('page-title', 'Dashboard')
 @section('main')
     @include('dashboard.main')
-    @include('dashboard.dashboard')
+    @include('chart.dashboard')
 @endsection
+

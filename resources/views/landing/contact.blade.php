@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="../../assets/css/templatemo-style.css">
+    <link href="../../assets/css/styles.css" rel="stylesheet" />
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
 <!--
     
 TemplateMo 556 Catalog-Z
@@ -24,12 +28,36 @@ https://templatemo.com/tm-556-catalog-z
         <div class="loader-section section-right"></div>
 
     </div>
-    <nav class="navbar navbar-expand-lg bg-danger">
-        <div class="container-fluid">
-            <a class="navbar-brand text-light" href="#">
-                <i><img src="../../assets/img/logo.png" alt="" style="width: 50px; height: 50px;"></i>
-                Kamerad Store ☭
-            </a>
+    <header>
+        <!-- Jumbotron -->
+<div class="p-3 text-center bg-muted border-bottom">
+  <div class="container-fluid">
+    <div class="row align-items-center gy-3">
+      <!-- Left elements -->
+      <div class="col-lg-4 col-sm-4 col-4 ">
+        <a href="https://mdbootstrap.com/" target="_blank" class="text-primary fw-bold text-xl-start fs-4 float-start">
+          <img src="../../assets/img/logo.png" style="width: 50px; height: 50px;"/>
+          Kamerad Store ☭
+        </a>
+      </div>
+      <!-- Left elements -->
+
+    </div>
+  </div>
+</div>
+<!-- Jumbotron -->
+
+  </header>
+  <nav class="navbar navbar-expand-lg bg-primary">
+      <div class="container-fluid">
+
+          <h6 class="mb-0 navbar-brand text-light">
+              <a href="{{ route('landing.index') }}" class="text-white-50">Home</a>
+              <span class="text-white-50 mx-2"> > </span>
+              <a href="{{ route('landing.contact') }}" class="text-white-50">Contact</a>
+              {{-- <span class="text-white-50 mx-2"> > </span>
+              <a href="" class="text-white"><u>Data</u></a> --}}
+            </h6>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fas fa-bars"></i>
             </button>
@@ -57,7 +85,7 @@ https://templatemo.com/tm-556-catalog-z
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
-                    <button class="btn btn-light text-danger dropdown-toggle" type="button" id="dropdownMenuButton" style="border-radius: 10px;"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-light text-primary dropdown-toggle" type="button" id="dropdownMenuButton" style="border-radius: 10px;"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ Auth::guard('customer')->user()->name }} ☭
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -66,7 +94,7 @@ https://templatemo.com/tm-556-catalog-z
                     </div>
                 </div>
             @else
-                <a class=" btn btn-light text-danger" style="border-radius: 10px;" href="{{ route('login') }}">
+                <a class=" btn btn-light text-primary" style="border-radius: 10px;" href="{{ route('login') }}">
                     Login 
                 </a>
             @endif

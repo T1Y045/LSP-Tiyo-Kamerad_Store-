@@ -79,8 +79,16 @@ class AuthController extends Controller
 
     public function profile()
     {
-        $user = Auth::user();
-        return view('landing.profile', compact('user'));
+        // Mengambil data pelanggan yang sedang login
+        $customer = Auth::guard('customer')->user();
+
+        // Memastikan $customer tidak null
+        if (!$customer) {
+            return redirect()->route('landing.index'); // Atau rute lain untuk pelanggan yang tidak terautentikasi
+        }
+
+        // Mengirim data pelanggan ke tampilan
+        return view('landing.profile', compact('customer'));
     }
 
 

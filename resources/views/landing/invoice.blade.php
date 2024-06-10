@@ -10,7 +10,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/fontawesome/css/all.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../assets/css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="../../assets/css/templatemo-style.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+
 
     <style>
         .card {
@@ -41,23 +47,103 @@
             margin-top: 10px;
         }
     </style>
+
+<style>
+    body{margin-top:20px;
+    background-color:#f2f6fc;
+    color:#69707a;
+    }
+    .img-account-profile {
+        height: 10rem;
+    }
+    .rounded-circle {
+        border-radius: 50% !important;
+    }
+    .card {
+        box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+    }
+    .card .card-header {
+        font-weight: 500;
+    }
+    .card-header:first-child {
+        border-radius: 0.35rem 0.35rem 0 0;
+    }
+    .card-header {
+        padding: 1rem 1.35rem;
+        margin-bottom: 0;
+        background-color: rgba(33, 40, 50, 0.03);
+        border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+    }
+    .form-control, .dataTable-input {
+        display: block;
+        width: 100%;
+        padding: 0.875rem 1.125rem;
+        font-size: 0.875rem;
+        font-weight: 400;
+        line-height: 1;
+        color: #69707a;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #c5ccd6;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border-radius: 0.35rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .nav-borders .nav-link.active {
+        color: #0061f2;
+        border-bottom-color: #0061f2;
+    }
+    .nav-borders .nav-link {
+        color: #69707a;
+        border-bottom-width: 0.125rem;
+        border-bottom-style: solid;
+        border-bottom-color: transparent;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+
+</style>
 </head>
 <body>
 
-      <!-- Page Loader -->
-      <div id="loader-wrapper">
-        <div id="loader"></div>
-
-        <div class="loader-section section-left"></div>
-        <div class="loader-section section-right"></div>
+    <header>
+        <!-- Jumbotron -->
+<div class="p-3 text-center bg-muted border-bottom">
+  <div class="container-fluid">
+    <div class="row align-items-center gy-3">
+      <!-- Left elements -->
+      <div class="col-lg-4 col-sm-4 col-4 ">
+        <a href="https://mdbootstrap.com/" target="_blank" class="text-primary fw-bold text-xl-start fs-4 float-start">
+          <img src="../../assets/img/logo.png" style="width: 50px; height: 50px;"/>
+          Kamerad Store ☭
+        </a>
+      </div>
+      <!-- Left elements -->
 
     </div>
-    <nav class="navbar navbar-expand-lg bg-danger">
-        <div class="container-fluid">
-            <a class="navbar-brand text-light" href="#">
-                <i><img src="../../assets/img/logo.png" alt="" style="width: 50px; height: 50px;"></i>
-                Kamerad Store ☭
-            </a>
+  </div>
+</div>
+<!-- Jumbotron -->
+
+  </header>
+  <nav class="navbar navbar-expand-lg bg-primary">
+      <div class="container-fluid">
+
+          <h6 class="mb-0 navbar-brand text-light">
+              <a href="{{ route('landing.index') }}" class="text-white-50">Home</a>
+              <span class="text-white-50 mx-2"> > </span>
+              <a href="{{ route('landing.invoice') }}" class="text-white-50">invoice</a>
+              {{-- <span class="text-white-50 mx-2"> > </span>
+              <a href="" class="text-white"><u>Data</u></a> --}}
+            </h6>
+
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fas fa-bars"></i>
             </button>
@@ -85,17 +171,16 @@
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
-                    <button class="btn btn-light text-danger dropdown-toggle" type="button" id="dropdownMenuButton" style="border-radius: 10px;"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-light text-primary dropdown-toggle" type="button" id="dropdownMenuButton" style="border-radius: 10px;"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ Auth::guard('customer')->user()->name }} ☭
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="{{ route('profile') }}">Profile</a>
                         <a class="dropdown-item active" href="{{ route('landing.invoice') }}">Your Order</a>
-                        <a class="dropdown-item" href="#" onclick="confirmLogout()">Logout</a>
                     </div>
                 </div>
             @else
-                <a class=" btn btn-light text-danger" style="border-radius: 10px;" href="{{ route('login') }}">
+                <a class=" btn btn-light text-primary" style="border-radius: 10px;" href="{{ route('login') }}">
                     Login 
                 </a>
             @endif
@@ -108,6 +193,13 @@
 
 
     <div class="container mt-5 mb-5">
+        <nav class="nav nav-borders">
+            <a class="nav-link" href="{{ route('profile') }}">Profile</a>
+            <a class="nav-link active ms-0" href="{{ route('landing.invoice') }}">Your Order</a>
+            <a class="nav-link" href="{{ route('wishlist.show') }}">Wishlist</a>
+            <a class="nav-link" href="">Notifications</a>
+        </nav>
+        <hr class="mt-0 mb-4">
       @foreach($orders as $order)
       <div class="card border border-danger rounded">
           <div class="card-body">
@@ -245,11 +337,6 @@
       </div>
   </footer>
     <script src="../../assets/js/plugins.js"></script>
-    <script>
-        $(window).on("load", function() {
-            $('body').addClass('loaded');
-        });
-    </script>
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

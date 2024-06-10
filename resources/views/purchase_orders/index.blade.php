@@ -7,10 +7,10 @@
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>
-    Payment
+    Purchase
   </title>
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
-  <!--     Fonts and icons     -->
+  <!-- Fonts and icons -->
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
   <!-- CSS Files -->
@@ -24,13 +24,11 @@
     @extends('dashboard.master')
     @section('nav')
         @include('dashboard.nav')
-    
     @endsection
-    
 
     <div class="main-panel">
       <!-- Navbar -->
-      @section('page-title', 'Payment')
+      @section('page-title', 'Purchase')
       @section('main')
           @include('dashboard.main')
       <!-- End Navbar -->
@@ -40,52 +38,34 @@
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header card-header-primary">
-                  <h4 class="card-title ">List Payment</h4>
-                  <form action="{{ route('payments.pdf') }}" method="GET">
-                      <label for="year">Pilih Tahun:</label>
-                      <select name="year" id="year">
-                          @for ($i = date('Y'); $i >= 2000; $i--)
-                              <option value="{{ $i }}">{{ $i }}</option>
-                          @endfor
-                      </select>
-                  
-                      <label for="month">Pilih Bulan:</label>
-                      <select name="month" id="month">
-                          @for ($m = 1; $m <= 12; $m++)
-                              <option value="{{ $m }}">{{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
-                          @endfor
-                      </select>
-                  
-                      <button type="submit" class="card-category btn-sm btn btn-gradient-primary">PRINT PDF</button>
-                  </form>
-                
-              </div>
+                  <h4 class="card-title">List Purchase</h4>
+                  <a href="{{ route('purchase.create') }}"><span class="card-category btn-sm btn btn-gradient-primary">+ Add New Purchase</span></a>
+                </div>
                 <div class="card-body">
                   <div class="table-responsive">
                     <table class="table">
-                      <thead class=" text-primary">
+                      <thead class="text-primary">
                         <th>NO.</th>
-                        <th>Order ID</th>
-                        <th>Payment Date</th>
-                        <th>Payment Method</th>
-                        <th>Amount</th>
+                        <th>Name</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
                         <th>Control</th>
                       </thead>
                       <tbody>
-                        @foreach ($payments as $idx => $data)
+                        @foreach ($purchaseOrders as $idx => $data)
                         <tr>
-                            <td>{{ $idx + 1 }}</td>
-                            <td>{{ $data->order_id }}</td>
-                            <td>{{ $data->payment_date }}</td>
-                            <td>{{ $data->payment_method }}</td>
-                            <td>{{ $data->amount }}</td>
+                          <td>{{ $idx + 1 }}</td>
+                          <td>{{ $data->distributor_name }}</td>
+                          <td>{{ $data->total_amount }}</td>
+                          <td>{{ $data->status }}</td>
                           <td>
-                            <form id="deleteForm{{ $data->id }}" action="{{ route('bayar.destroy', $data->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <a href="#" onclick="confirmDelete('{{ $data->id }}')" class="btn-sm btn btn-danger">Delete</a>
+                            <form id="deleteForm{{ $data->id }}" action="{{ route('purchase.destroy', $data->id) }}" method="POST">
+                              @csrf
+                              @method('DELETE')
+                              <a href="{{ route('purchase.edit', $data->id) }}" class="btn-sm btn btn-primary">Edit</a>
+                              <button type="button" onclick="confirmDelete('{{ $data->distributor_name }}', {{ $data->id }})" class="btn-sm btn btn-danger">Delete</button>
                             </form>
-                            </td>
+                          </td>
                         </tr>
                         @endforeach
                       </tbody>
@@ -156,24 +136,22 @@
       pesanSimpan();
     };
   </script>
-<script>
-    function confirmDelete(paymentId) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'You are about to delete this payment data. This action cannot be undone.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('deleteForm' + paymentId).submit();
-            }
-        });
+  <script>
+    // delete alert
+    function confirmDelete(distributorName, distributorId) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'You are about to delete the distributor "' + distributorName + '". This action cannot be undone.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementById('deleteForm' + distributorId).submit();
+        }
+      });
     }
-</script>
-
+  </script>
 </body>
-
-
 </html>

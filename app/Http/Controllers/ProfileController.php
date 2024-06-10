@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Customers;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -14,28 +16,43 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
-    public function edit(Request $request): View
+    public function edit(Request $request)
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+
     }
 
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
 
-        $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
-    }
+     public function update(Request $request)
+     {
+         $customer = Auth::guard('customer')->user();
+     
+         // Validasi data yang diperbarui
+         $validated = $request->validate([
+             'name' => 'required|string|max:255',
+             'email' => 'required|string|email|max:255|unique:customers,email,'.$customer->id,
+             'phone' => 'nullable|string|max:15',
+             'address1' => 'nullable|string|max:255',
+             'address2' => 'nullable|string|max:255',
+             'address3' => 'nullable|string|max:255',
+             'password' => 'nullable|string|min:8', // Tambahkan validasi untuk password baru
+         ]);
+     
+         // Jika ada password baru yang disertakan, enkripsi password baru
+         if (isset($validated['password'])) {
+             $validated['password'] = Hash::make($validated['password']);
+         }
+     
+         // Update data pelanggan
+         $customer->update($validated);
+     
+         return redirect()->route('profile')->with('success', 'Profile updated successfully.');
+     }
+        
 
     /**
      * Delete the user's account.

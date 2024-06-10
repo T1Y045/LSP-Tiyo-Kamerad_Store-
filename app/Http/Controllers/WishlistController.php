@@ -52,12 +52,15 @@ class WishlistController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        //
+        $customer_id = Auth::guard('customer')->id();
+        $wishlistItems = Wishlist::where('customer_id', $customer_id)->with('product')->get();
+    
+        return view('landing.wishlist', compact('wishlistItems'));
     }
-
-    /**
+    
+        /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
@@ -77,16 +80,32 @@ class WishlistController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-{
-    $wishlistItem = Wishlist::find($id);
+    {
+        $wishlistItem = Wishlist::find($id);
 
-    if (!$wishlistItem) {
-        return response()->json(['success' => false, 'message' => 'Item not found'], 404);
+        if (!$wishlistItem) {
+            return response()->json(['success' => false, 'message' => 'Item not found'], 404);
+        }
+
+        $wishlistItem->delete();
+
+        return response()->json(['success' => true]);
     }
 
-    $wishlistItem->delete();
+    // buat wishlist.blade.php
+    public function remove($id)
+    {
+        $wishlistItem = Wishlist::find($id);
+    
+        if (!$wishlistItem) {
+            return response()->json(['success' => false, 'message' => 'Item not found'], 404);
+        }
+    
+        $wishlistItem->delete();
+    
+        return response()->json(['success' => true]);
+    }
+        
 
-    return response()->json(['success' => true]);
-}
 
 }

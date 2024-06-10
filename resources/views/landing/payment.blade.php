@@ -16,7 +16,7 @@
             <div class="card-body">
               <h2 class="card-title">Payment</h2>
               <p class="card-text">Order ID: {{ $paymentInfo['orderId'] }}</p>
-              <p class="card-text">Total Amount: Rp. {{ number_format($paymentInfo['totalAmount'], 2) }}</p>
+              <p class="card-text">Total Amount: Rp. <span id="totalAmount">{{ number_format($paymentInfo['totalAmount'], 2) }}</span></p>
             </div>
           
             <div class="card-body">
@@ -44,6 +44,13 @@
         <form action="{{ route('processPayment') }}" method="POST" id="payment-form">
             @csrf
             <div class="form-group">
+                <label for="shipping_method">Shipping Method</label>
+                <select class="form-control" id="shipping_method" name="shipping_method" required>
+                    <option value="standard">Standard - Rp. 20,000</option>
+                    <option value="express">Express - Rp. 50,000</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <label for="payment_method">Payment Method</label>
                 <select class="form-control" id="payment_method" name="payment_method" required>
                     <option value="cod">Cash on Delivery (COD)</option>
@@ -65,6 +72,27 @@
             var paymentMethodSelect = document.getElementById('payment_method');
             var payButton = document.getElementById('pay-button');
             var amountGroup = document.getElementById('amount-group');
+            var shippingMethodSelect = document.getElementById('shipping_method');
+            var totalAmountElement = document.getElementById('totalAmount');
+            var amountInput = document.getElementById('amount');
+            var baseAmount = {{ $paymentInfo['totalAmount'] }};
+    
+            function updateTotalAmount() {
+                var shippingCost = 0;
+                switch (shippingMethodSelect.value) {
+                    case 'standard':
+                        shippingCost = 20000;
+                        break;
+                    case 'express':
+                        shippingCost = 50000;
+                        break;
+                }
+                var totalAmount = baseAmount + shippingCost;
+                totalAmountElement.textContent = totalAmount.toLocaleString('id-ID', { minimumFractionDigits: 2 });
+                amountInput.value = totalAmount;
+            }
+    
+            shippingMethodSelect.addEventListener('change', updateTotalAmount);
     
             paymentMethodSelect.addEventListener('change', function () {
                 if (this.value === 'midtrans') {
@@ -75,6 +103,9 @@
                     amountGroup.style.display = 'none';
                 }
             });
+    
+            // Initial update
+            updateTotalAmount();
     
             // Handle form submission
             document.getElementById('payment-form').addEventListener('submit', function (event) {

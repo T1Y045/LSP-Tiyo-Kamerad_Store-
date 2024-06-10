@@ -76,7 +76,7 @@ class ProductsController extends Controller
             Products::create($requestData);
 
             // Setelah penyimpanan berhasil, arahkan pengguna kembali ke halaman indeks produk
-            return redirect()->route('products.index')->with('success', 'Product added successfully.');
+            return redirect('products.index')->with('success', 'Product added successfully.');
         
     }
 

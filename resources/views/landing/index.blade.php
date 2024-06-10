@@ -10,6 +10,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
@@ -41,6 +42,7 @@
     <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Poppins:400,700&display=swap&subset=latin-ext" rel="stylesheet">
     <link rel="stylesheet" href="../../assets/css/owl.carousel.min.css">
     <link rel="stylesoeet" href="../../assets/css/owl.theme.default.min.css">
+    <link href="../../assets/css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS for styling -->
@@ -87,6 +89,31 @@
         }
     </style>
 
+     {{-- style untuk next page --}}
+    <style>
+        .tm-paging-col {
+            margin-top: 20px;
+        }
+        
+        .pagination {
+            margin: 0;
+        }
+
+        .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+
+        .page-link {
+            color: #007bff;
+        }
+
+        .page-link:hover {
+            color: #0056b3;
+        }
+    </style>
+
 
 <!--
     
@@ -105,19 +132,43 @@ https://templatemo.com/tm-556-catalog-z
         <div class="loader-section section-right"></div>
 
     </div>
-    <nav class="navbar navbar-expand-lg bg-danger">
+    <header>
+          <!-- Jumbotron -->
+  <div class="p-3 text-center bg-muted border-bottom">
+    <div class="container-fluid">
+      <div class="row align-items-center gy-3">
+        <!-- Left elements -->
+        <div class="col-lg-4 col-sm-4 col-4 ">
+          <a href="https://mdbootstrap.com/" target="_blank" class="text-primary fw-bold text-xl-start fs-4 float-start">
+            <img src="../../assets/img/logo.png" style="width: 50px; height: 50px;"/>
+            Kamerad Store ☭
+          </a>
+        </div>
+        <!-- Left elements -->
+
+      </div>
+    </div>
+  </div>
+  <!-- Jumbotron -->
+
+    </header>
+    <nav class="navbar navbar-expand-lg bg-primary">
         <div class="container-fluid">
-            <a class="navbar-brand text-light" href="#">
-                <i><img src="../../assets/img/logo.png" alt="" style="width: 50px; height: 50px;"></i>
-                Kamerad Store ☭
-            </a>
+
+            <h6 class="mb-0 navbar-brand text-light">
+                <a href="{{ route('landing.index') }}" class="text-white-50">Home</a>
+                {{-- <span class="text-white-50 mx-2"> > </span>
+                <a href="" class="text-white-50">Library</a>
+                <span class="text-white-50 mx-2"> > </span>
+                <a href="" class="text-white"><u>Data</u></a> --}}
+              </h6>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fas fa-bars"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link nav-link-1 active text-light" aria-current="page" href="index.html">Menu</a>
+                    <a class="nav-link nav-link-1 active text-light" aria-current="page" href="{{ route('landing.index') }}">Menu</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link nav-link-2 text-light" href="{{ route('landing.video') }}">Videos</a>
@@ -138,7 +189,7 @@ https://templatemo.com/tm-556-catalog-z
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
-                    <button class="btn btn-light text-danger dropdown-toggle" type="button" id="dropdownMenuButton" style="border-radius: 10px;"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-light text-primary dropdown-toggle" type="button" id="dropdownMenuButton" style="border-radius: 10px;"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ Auth::guard('customer')->user()->name }} ☭
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -148,24 +199,34 @@ https://templatemo.com/tm-556-catalog-z
                     </div>
                 </div>
             @else
-                <a class=" btn btn-light text-danger" style="border-radius: 10px;" href="{{ route('login') }}">
+                <a class=" btn btn-light text-primary" style="border-radius: 10px;" href="{{ route('login') }}">
                     Login 
                 </a>
             @endif
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-secondary d-flex" style="border-radius: 10px;" data-toggle="modal" data-target="#wishlistModal" onclick="loadWishlistModal()">
+        <button type="button" class="btn btn-danger d-flex" style="border-radius: 10px;" data-toggle="modal" data-target="#wishlistModal" onclick="loadWishlistModal()">
             <span class="material-symbols-outlined">
                 credit_card_heart
             </span>
         </button>
+
+        <form class="d-flex ml-3">
+            <button class="btn btn-warning d-flex btn-cart" style="border-radius: 10px;" type="button">
+                <i class="bi-cart-fill me-1"></i>
+                <span class="material-symbols-outlined">
+                    shopping_cart
+                </span>
+                <span id="cartItemCount" class="badge bg-dark text-white rounded-pill">{{ count(session('cart', [])) }}</span>
+            </button>
+        </form>      
     </nav>
 
 
 <!-- Modal for Wishlist -->
 <div class="modal fade" id="wishlistModal" tabindex="-1" role="dialog" aria-labelledby="wishlistModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="wishlistModalLabel">Product Wishlist</h5>
@@ -196,41 +257,10 @@ https://templatemo.com/tm-556-catalog-z
     </div>
 </div>
 
-    
-    <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll" data-image-src="../../assets/img/bglan.jpg">
-        <form id="searchForm" class="d-flex tm-search-form">
-            <input id="searchInput" class="form-control text-danger tm-search-input" type="search" placeholder="Search" aria-label="Search">
-            <button id="searchButton" class="btn bg-danger btn-primary tm-search-btn" style="height: 40px" type="button">
-                <i class="fas fa-search"></i>
-            </button>
-        </form>
-            </div>    
 
-
-
-    <div class="container-fluid tm-container-content tm-mt-60">
-        <div class="row mb-4">
-            <h2 class="col-6 text-danger">
-                Product List
-            </h2>
-            <div class="col-6 d-flex justify-content-end align-items-center">
-                <form action="" class="text-danger">
-                    Page <input type="text" value="1" size="1" class="tm-input-paging tm-text-primary"> of 200
-                </form>
-            </div>
-        </div>
-
-        <form class="d-flex mr-5">
-            <button class="btn btn-outline-dark d-flex btn-cart" style="border-radius: 10px;" type="button">
-                <i class="bi-cart-fill me-1"></i>
-                Cart
-                <span id="cartItemCount" class="badge bg-dark text-white ms-1 rounded-pill">{{ count(session('cart', [])) }}</span>
-            </button>
-        </form>        
-    
         {{-- modal chart --}}
         <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="cartModalLabel">Your Cart</h5>
@@ -251,172 +281,219 @@ https://templatemo.com/tm-556-catalog-z
                 </div>
             </div>
         </div>
+
+    
+    <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll" data-image-src="../../assets/img/bglan.jpg">
+        <form id="searchForm" class="d-flex tm-search-form">
+            <input id="searchInput" class="form-control text-danger tm-search-input" type="search" placeholder="Search" aria-label="Search">
+            <button id="searchButton" class="btn bg-primary btn-primary tm-search-btn" style="height: 40px" type="button">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+            </div>    
+
+
+
+    <div class="container-fluid tm-container-content tm-mt-60">
+        <div class="row mb-4">
+            <h2 class="col-6 text-primary">
+                Product List
+            </h2>
+            
+            <div class="col-6 d-flex justify-content-end align-items-center">
+                <!-- Example split danger button -->
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary">Filter Price</button>
+                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" onclick="filterProducts('lowest')">Lowest Price</a>
+                        <a class="dropdown-item" href="#" onclick="filterProducts('highest')">Highest Price</a>
+                        <a class="dropdown-item" href="#" onclick="filterProducts('normal')">Normal</a>
+                    </div>
+                </div>      
+                <form id="pagingForm" class="ml-4 text-primary">
+                    Page <input type="number" id="pageInput" value="1" min="1" max="200" size="1" class="tm-input-paging tm-text-primary" onchange="goToPage(this.value)">of 200
+                </form>    
+            </div>
+        </div>      
+    
+
             
 
-        <!-- Fashion section start -->
-        <div class="fashion_section mt-5">
-            <div class="container-fluid">
-                <div id="main_slider" class="carousel slide" data-ride="carousel" data-interval="false">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <div class="container">
-                                <div class="fashion_section_2">
-                                    <div class="row">
-                                        @foreach($products as $data)
-                                        <div class="col-lg-4 col-md-6 col-sm-12">
-                                            <div class="card mb-4">
-                                                <img src="{{ asset($data->image1_url) }}" class="card-img-top" style="height: 350px" alt="{{ $data->product_name }}">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">{{ $data->product_name }}</h5>
-                                                    @php
-                                                        $discount = $data->discount;
-                                                        $discountedPrice = $data->price;
-                                                    @endphp
-                                                    @if ($discount)
-                                                        @php
-                                                            $discountedPrice = $data->price - ($data->price * ($discount->percentage / 100));
-                                                        @endphp
-                                                        <p class="card-text">Price: <span style="color: #262626;">Rp. <s>{{ $data->price }}</s> <strong>{{ $discountedPrice }}</strong></span></p>
-                                                    @else
-                                                        <p class="card-text">Price: <span style="color: #262626;">Rp. {{ $data->price }}</span></p>
-                                                    @endif
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <div class="btn-group">
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#productModal{{$data->id}}">View more</button>
-                                                            <a href="{{ route('landing.show', $data->id) }}" class="btn btn-sm btn-outline-secondary">Detail Product</a>
-                                                        </div>
-                                                        <button class="btn btn-sm btn-primary" onclick="addToWishlist({{ $data->id }})">Wishlist</button>
-                                                    </div>
+<!-- Fashion section start -->
+<div class="fashion_section mt-5">
+    <div class="container-fluid">
+        <div id="main_slider" class="carousel slide" data-ride="carousel" data-interval="false">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="container">
+                        <div class="fashion_section_2">
+                            <div class="row">
+                                @foreach($products as $data)
+                                <div class="col-lg-4 col-md-6 col-sm-12">
+                                    <div class="card mb-4">
+                                        <img src="{{ asset($data->image1_url) }}" class="card-img-top" style="height: 350px" alt="{{ $data->product_name }}">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ $data->product_name }}</h5>
+                                            @php
+                                                $discount = $data->discount;
+                                                $discountedPrice = $data->price;
+                                            @endphp
+                                            @if ($discount)
+                                                @php
+                                                    $discountedPrice = $data->price - ($data->price * ($discount->percentage / 100));
+                                                @endphp
+                                                <p class="card-text">Price: <span style="color: #262626;">Rp. <s>{{ $data->price }}</s> <strong>{{ $discountedPrice }}</strong></span></p>
+                                            @else
+                                                <p class="card-text">Price: <span style="color: #262626;">Rp. {{ $data->price }}</span></p>
+                                            @endif
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#productModal{{$data->id}}">View more</button>
+                                                    <a href="{{ route('landing.show', $data->id) }}" class="btn btn-sm btn-outline-secondary">Detail Product</a>
                                                 </div>
+                                                <button class="btn btn-sm btn-primary" onclick="addToWishlist({{ $data->id }})">Wishlist</button>
                                             </div>
                                         </div>
-                                        
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="productModal{{$data->id}}" tabindex="-1" role="dialog" aria-labelledby="productModal{{$data->id}}Label" aria-hidden="true">
-                                            <div class="modal-dialog modal-lg" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="productModal{{$data->id}}Label">{{$data->product_name}}</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div id="carouselExampleControls{{$data->id}}" class="carousel slide" data-ride="carousel">
-                                                                    <div class="carousel-inner">
-                                                                        <div class="carousel-item active">
-                                                                            <img class="d-block w-100" src="{{ asset($data->image1_url) }}" alt="First slide">
-                                                                        </div>
-                                                                        @if($data->image2_url)
-                                                                        <div class="carousel-item">
-                                                                            <img class="d-block w-100" src="{{ asset($data->image2_url) }}" alt="Second slide">
-                                                                        </div>
-                                                                        @endif
-                                                                        @if($data->image3_url)
-                                                                        <div class="carousel-item">
-                                                                            <img class="d-block w-100" src="{{ asset($data->image3_url) }}" alt="Third slide">
-                                                                        </div>
-                                                                        @endif
-                                                                        @if($data->image4_url)
-                                                                        <div class="carousel-item">
-                                                                            <img class="d-block w-100" src="{{ asset($data->image4_url) }}" alt="Fourth slide">
-                                                                        </div>
-                                                                        @endif
-                                                                        @if($data->image5_url)
-                                                                        <div class="carousel-item">
-                                                                            <img class="d-block w-100" src="{{ asset($data->image5_url) }}" alt="Fifth slide">
-                                                                        </div>
-                                                                        @endif
-                                                                    </div>
-                                                                    <a class="carousel-control-prev" href="#carouselExampleControls{{$data->id}}" role="button" data-slide="prev">
-                                                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                                        <span class="sr-only">Previous</span>
-                                                                    </a>
-                                                                    <a class="carousel-control-next" href="#carouselExampleControls{{$data->id}}" role="button" data-slide="next">
-                                                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                                        <span class="sr-only">Next</span>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <p><strong>Description:</strong> 
-                                                                    @if (strlen($data->description) > 100)
-                                                                        <span id="desc{{$data->id}}">{{ substr($data->description, 0, 100) }}</span>
-                                                                        <span id="dots{{$data->id}}" style="display: inline;">...</span>
-                                                                        <span id="more{{$data->id}}" style="display: none;">{{ substr($data->description, 100) }}</span>
-                                                                        <button onclick="toggleDescription({{ $data->id }})" id="readMoreBtn{{$data->id}}" class="btn btn-link">Read more</button>
-                                                                    @else
-                                                                        {{ $data->description }}
-                                                                    @endif
-                                                                </p>
-                                                                @if ($discount)
-                                                                    <p>Price: Rp. <s>{{ $data->price }}</s> <strong>{{ $discountedPrice }}</strong></p>
-                                                                @else
-                                                                    <p>Price: Rp. {{ $data->price }}</p>
-                                                                @endif
-                                                                <span class="tm-text-gray-light">{{ $data->created_at->format('d M Y') }}</span>
-                                                                <p><strong>Stock Quantity:</strong> {{$data->stok_quantity}}</p>
-                                                                <div class="input-group mb-3 d-flex">
-                                                                    <input type="number" id="inputQuantity{{ $data->id }}" class="form-control" value="1" min="1">
-                                                                    <div class="input-group-append">
-                                                                        <button class="btn btn-primary" onclick="addToCart({{ $data->id }})">Add to Cart</button>
-                                                                    </div>
-                                                                </div>                
-                                                                <form action="" method="POST" id="reviewForm{{$data->id}}">
-                                                                    @csrf
-                                                                    <input type="hidden" name="productId" value="{{ $data->id }}">
-                                                                    <div class="form-group">
-                                                                        <label for="reviewText{{$data->id}}">Review:</label>
-                                                                        <textarea class="form-control" id="reviewText{{$data->id}}" name="reviewText" rows="3"></textarea>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label for="rating{{$data->id}}">Rating:</label>
-                                                                        <select class="form-control" style="height: 50px" id="rating{{$data->id}}" name="rating">
-                                                                            <option value="1">1</option>
-                                                                            <option value="2">2</option>
-                                                                            <option value="3">3</option>
-                                                                            <option value="4">4</option>
-                                                                            <option value="5">5</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <button type="submit" class="px-2 py-1 btn btn-primary">Submit Review</button>
-                                                                </form>                                                                      
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        @endforeach
                                     </div>
                                 </div>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="productModal{{$data->id}}" tabindex="-1" role="dialog" aria-labelledby="productModal{{$data->id}}Label" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="productModal{{$data->id}}Label">{{$data->product_name}}</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div id="carouselExampleControls{{$data->id}}" class="carousel slide" data-ride="carousel">
+                                                            <div class="carousel-inner">
+                                                                <div class="carousel-item active">
+                                                                    <img class="d-block w-100" src="{{ asset($data->image1_url) }}" alt="First slide">
+                                                                </div>
+                                                                @if($data->image2_url)
+                                                                <div class="carousel-item">
+                                                                    <img class="d-block w-100" src="{{ asset($data->image2_url) }}" alt="Second slide">
+                                                                </div>
+                                                                @endif
+                                                                @if($data->image3_url)
+                                                                <div class="carousel-item">
+                                                                    <img class="d-block w-100" src="{{ asset($data->image3_url) }}" alt="Third slide">
+                                                                </div>
+                                                                @endif
+                                                                @if($data->image4_url)
+                                                                <div class="carousel-item">
+                                                                    <img class="d-block w-100" src="{{ asset($data->image4_url) }}" alt="Fourth slide">
+                                                                </div>
+                                                                @endif
+                                                                @if($data->image5_url)
+                                                                <div class="carousel-item">
+                                                                    <img class="d-block w-100" src="{{ asset($data->image5_url) }}" alt="Fifth slide">
+                                                                </div>
+                                                                @endif
+                                                            </div>
+                                                            <a class="carousel-control-prev" href="#carouselExampleControls{{$data->id}}" role="button" data-slide="prev">
+                                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                                <span class="sr-only">Previous</span>
+                                                            </a>
+                                                            <a class="carousel-control-next" href="#carouselExampleControls{{$data->id}}" role="button" data-slide="next">
+                                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                                <span class="sr-only">Next</span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p><strong>Description:</strong>
+                                                            @if (strlen($data->description) > 100)
+                                                                <span id="desc{{$data->id}}">{{ substr($data->description, 0, 100) }}</span>
+                                                                <span id="dots{{$data->id}}" style="display: inline;">...</span>
+                                                                <span id="more{{$data->id}}" style="display: none;">{{ substr($data->description, 100) }}</span>
+                                                                <button onclick="toggleDescription({{ $data->id }})" id="readMoreBtn{{$data->id}}" class="btn btn-link">Read more</button>
+                                                            @else
+                                                                {{ $data->description }}
+                                                            @endif
+                                                        </p>
+                                                        @if ($discount)
+                                                            <p>Price: Rp. <s>{{ $data->price }}</s> <strong>{{ $discountedPrice }}</strong></p>
+                                                        @else
+                                                            <p>Price: Rp. {{ $data->price }}</p>
+                                                        @endif
+                                                        <span class="tm-text-gray-light">{{ $data->created_at->format('d M Y') }}</span>
+                                                        <p><strong>Stock Quantity:</strong> {{$data->stok_quantity}}</p>
+                                                        <div class="input-group mb-3 d-flex">
+                                                            <input type="number" id="inputQuantity{{ $data->id }}" class="form-control" value="1" min="1">
+                                                            <div class="input-group-append">
+                                                                <button class="btn btn-primary" onclick="addToCart({{ $data->id }})">Add to Cart</button>
+                                                            </div>
+                                                        </div>
+                                                        <form action="" method="POST" id="reviewForm{{$data->id}}">
+                                                            @csrf
+                                                            <input type="hidden" name="productId" value="{{ $data->id }}">
+                                                            <div class="form-group">
+                                                                <label for="reviewText{{$data->id}}">Review:</label>
+                                                                <textarea class="form-control" id="reviewText{{$data->id}}" name="reviewText" rows="3"></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="rating{{$data->id}}">Rating:</label>
+                                                                <select class="form-control" style="height: 50px" id="rating{{$data->id}}" name="rating">
+                                                                    <option value="1">1</option>
+                                                                    <option value="2">2</option>
+                                                                    <option value="3">3</option>
+                                                                    <option value="4">4</option>
+                                                                    <option value="5">5</option>
+                                                                </select>
+                                                            </div>
+                                                            <button type="submit" class="px-2 py-1 btn btn-primary">Submit Review</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Fashion section end -->
+    </div>
+</div>
+<!-- Fashion section end -->
 
-    
-        <div class="row tm-mb-90">
-            <div class="col-12 d-flex justify-content-between align-items-center tm-paging-col">
-                <a href="javascript:void(0);" class="btn btn-primary tm-btn-prev mb-2 disabled">Previous</a>
-                <div class="tm-paging d-flex">
-                    <a href="javascript:void(0);" class="active tm-paging-link">1</a>
-                    <a href="javascript:void(0);" class="tm-paging-link">2</a>
-                    <a href="javascript:void(0);" class="tm-paging-link">3</a>
-                    <a href="javascript:void(0);" class="tm-paging-link">4</a>
-                </div>
-                <a href="javascript:void(0);" class="btn btn-primary tm-btn-next">Next Page</a>
-            </div>            
-        </div>
-    </div> <!-- container-fluid, tm-container-content -->
+<div class="row tm-mb-90">
+    <div class="col-12 d-flex justify-content-between align-items-center tm-paging-col">
+        @if ($products->onFirstPage())
+            <a href="javascript:void(0);" class="btn btn-primary tm-btn-prev mb-2 disabled">Previous</a>
+        @else
+            <a href="{{ $products->previousPageUrl() }}" class="btn btn-primary tm-btn-prev mb-2">Previous</a>
+        @endif
+
+        @if ($products->lastPage() > 1)
+            <div class="tm-paging d-flex">
+                @for ($i = 1; $i <= min(2, $products->lastPage()); $i++)
+                    <a href="{{ $products->url($i) }}" class="tm-paging-link @if ($i === $products->currentPage()) active @endif">{{ $i }}</a>
+                @endfor
+            </div>
+        @endif
+            @if ($products->hasMorePages())
+            <a href="{{ $products->nextPageUrl() }}" class="btn btn-primary tm-btn-next">Next Page</a>
+        @else
+            <a href="javascript:void(0);" class="btn btn-primary tm-btn-next disabled">Next Page</a>
+        @endif
+    </div>
+</div>
 
     <footer class="tm-bg-gray pt-5 pb-3 tm-text-gray tm-footer">
         <div class="container-fluid tm-container-small">
@@ -531,6 +608,14 @@ https://templatemo.com/tm-556-catalog-z
         }
     }
 </script>
+
+
+<script>
+    function goToPage(pageNumber) {
+        window.location.href = "{{ url()->current() }}?page=" + pageNumber;
+    }
+</script>
+
 <script>
     $(document).ready(function() {
         $('.modal-body .img-fluid').magnificPopup({
@@ -786,10 +871,10 @@ function addToWishlist(productId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Product added to wishlist');
-            loadWishlistItems(); // Reload wishlist items to update the DOM
+            Swal.fire('Success', 'Product added to wishlist', 'success');
+            loadWishlistItems();
         } else {
-            alert('Failed to add product to wishlist');
+            Swal.fire('Error', 'Failed to add product to wishlist', 'error');
         }
     })
     .catch(error => console.error('Error:', error));
@@ -807,10 +892,10 @@ function removeFromWishlist(itemId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Item removed from wishlist');
-            loadWishlistItems(); // Reload wishlist items to update the DOM
+            Swal.fire('Success', 'Item removed from wishlist', 'success');
+            loadWishlistItems();
         } else {
-            alert('Failed to remove item from wishlist');
+            Swal.fire('Error', 'Failed to remove item from wishlist', 'error');
         }
     })
     .catch(error => console.error('Error:', error));
@@ -931,12 +1016,26 @@ function addAllToCart() {
     });
 </script>
 
+{{-- price filter --}}
+<script>
+    function filterProducts(sortType) {
+        var url = "{{ route('landing.index') }}";
+        if (sortType === 'lowest') {
+            url += "?sort=asc";
+        } else if (sortType === 'highest') {
+            url += "?sort=desc";
+        }
+        window.location.href = url;
+    }
+</script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 
 
 </body>

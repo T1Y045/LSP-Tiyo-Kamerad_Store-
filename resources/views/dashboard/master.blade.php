@@ -35,6 +35,10 @@
   
   <script src="https://lipis.github.io/bootstrap-sweetalert/dist/sweetalert.js"></script>
   
+  {{-- chart dashboard --}}
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+
   
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://lipis.github.io/bootstrap-sweetalert/dist/sweetalert.css">
@@ -331,10 +335,14 @@ md.initDashboardPageCharts();
       }
    </style>
 
+
+
+   {{-- chart dashboard --}}
+
    
 
 
-{{-- nav color change  --}}
+
         
 </body>
 

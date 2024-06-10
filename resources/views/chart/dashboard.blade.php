@@ -1,116 +1,49 @@
 <div class="content">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xl-4 col-lg-12">
-          <div class="card card-chart">
-            <div class="card-header card-header-success">
-              <div class="ct-chart" id="dailySalesChart"></div>
+        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-header card-header-danger card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">favorite</i>
+                    </div>
+                    <p class="card-category">Wishlist Items</p>
+                    <h3 class="card-title">{{ $wishlist->count() }} items</h3>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                        <i class="material-icons text-warning">warning</i>
+                        <a href="#pablo" class="warning-link">View Wishlist</a>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-              <h4 class="card-title">Daily Sales</h4>
-              <p class="card-category">
-                <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase in today sales.</p>
-            </div>
-            <div class="card-footer">
-              <div class="stats">
-                <i class="material-icons">access_time</i> updated 4 minutes ago
-              </div>
-            </div>
-          </div>
         </div>
-        <div class="col-xl-4 col-lg-12">
-          <div class="card card-chart">
-            <div class="card-header card-header-warning">
-              <div class="ct-chart" id="websiteViewsChart"></div>
+        
+        <div class="col-xl-5 col-lg-6 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">store</i>
+                    </div>
+                    <p class="card-category">Revenue</p>
+                    <h3 class="card-title">Rp. {{ number_format($totalIncome, 2) }}</h3>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                        <i class="material-icons">date_range</i> Last 24 Hours
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-              <h4 class="card-title">Email Subscriptions</h4>
-              <p class="card-category">Last Campaign Performance</p>
-            </div>
-            <div class="card-footer">
-              <div class="stats">
-                <i class="material-icons">access_time</i> campaign sent 2 days ago
-              </div>
-            </div>
-          </div>
         </div>
-        <div class="col-xl-4 col-lg-12">
-          <div class="card card-chart">
-            <div class="card-header card-header-danger">
-              <div class="ct-chart" id="completedTasksChart"></div>
-            </div>
-            <div class="card-body">
-              <h4 class="card-title">Completed Tasks</h4>
-              <p class="card-category">Last Campaign Performance</p>
-            </div>
-            <div class="card-footer">
-              <div class="stats">
-                <i class="material-icons">access_time</i> campaign sent 2 days ago
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-          <div class="card card-stats">
-            <div class="card-header card-header-warning card-header-icon">
-              <div class="card-icon">
-                <i class="material-icons">content_copy</i>
-              </div>
-              <p class="card-category">Used Space</p>
-              <h3 class="card-title">49/50
-                <small>GB</small>
-              </h3>
-            </div>
-            <div class="card-footer">
-              <div class="stats">
-                <i class="material-icons text-warning">warning</i>
-                <a href="#pablo" class="warning-link">Get More Space...</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-          <div class="card card-stats">
-            <div class="card-header card-header-success card-header-icon">
-              <div class="card-icon">
-                <i class="material-icons">store</i>
-              </div>
-              <p class="card-category">Revenue</p>
-              <h3 class="card-title">$34,245</h3>
-            </div>
-            <div class="card-footer">
-              <div class="stats">
-                <i class="material-icons">date_range</i> Last 24 Hours
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-          <div class="card card-stats">
-            <div class="card-header card-header-danger card-header-icon">
-              <div class="card-icon">
-                <i class="material-icons">info_outline</i>
-              </div>
-              <p class="card-category">Fixed Issues</p>
-              <h3 class="card-title">75</h3>
-            </div>
-            <div class="card-footer">
-              <div class="stats">
-                <i class="material-icons">local_offer</i> Tracked from Github
-              </div>
-            </div>
-          </div>
-        </div>
+        
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
           <div class="card card-stats">
             <div class="card-header card-header-info card-header-icon">
               <div class="card-icon">
-                <i class="fa fa-twitter"></i>
+                <i class="material-icons">forum</i>
               </div>
-              <p class="card-category">Followers</p>
-              <h3 class="card-title">+245</h3>
+              <p class="card-category">Review</p>
+              <h3 class="card-title">+{{ $review->count() }}</h3>
             </div>
             <div class="card-footer">
               <div class="stats">
@@ -122,60 +55,60 @@
       </div>
       <div class="row mt-4">
         <div class="col-md-6">
-            <h3>Orders</h3>
+            <h3 class="text-secondary">Orders</h3>
             <canvas id="ordersChart"></canvas>
         </div>
         <div class="col-md-6">
-            <h3>Payments</h3>
+            <h3 class="text-secondary">Payments</h3>
             <canvas id="paymentsChart"></canvas>
         </div>
 
 
       <div class="row">
         <div class="col-lg-6 col-md-12">
-          <div class="card">
-            <div class="card-header card-header-primary">
-              <h4 class="card-title">Employees Stats</h4>
-              <p class="card-category">New employees on 15th September, 2016</p>
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">Customers Stats</h4>
+                    <p class="card-category">List of customers</p>
+                </div>
+                <div class="card-body table-responsive">
+                    <table class="table table-hover">
+                        <thead class="text-warning">
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                        </thead>
+                        <tbody>
+                            @foreach($customers as $customer)
+                            <tr>
+                                <td>{{ $customer->id }}</td>
+                                <td>{{ $customer->name }}</td>
+                                <td>{{ $customer->email }}</td>
+                                <td>{{ $customer->phone }}</td>
+                                <td>{{ $customer->address1 }}, {{ $customer->address2 }}, {{ $customer->address3 }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item"><a class="page-link" href="{{ $customers->previousPageUrl() }}">Previous</a></li>
+                            @for ($i = 1; $i <= $customers->lastPage(); $i++)
+                                <li class="page-item {{ $i == $customers->currentPage() ? 'active' : '' }}"><a class="page-link" href="{{ $customers->url($i) }}">{{ $i }}</a></li>
+                            @endfor
+                            <li class="page-item"><a class="page-link" href="{{ $customers->nextPageUrl() }}">Next</a></li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
-            <div class="card-body table-responsive">
-              <table class="table table-hover">
-                <thead class="text-warning">
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Salary</th>
-                  <th>Country</th>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Dakota Rice</td>
-                    <td>$36,738</td>
-                    <td>Niger</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Minerva Hooper</td>
-                    <td>$23,789</td>
-                    <td>Curaçao</td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Sage Rodriguez</td>
-                    <td>$56,142</td>
-                    <td>Netherlands</td>
-                  </tr>
-                  <tr>
-                    <td>4</td>
-                    <td>Philip Chaney</td>
-                    <td>$38,735</td>
-                    <td>Korea, South</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
+        
+        
+        
         <div class="col-lg-6 col-md-12">
           <div class="card">
             <div class="card-header card-header-tabs card-header-warning">
@@ -426,3 +359,62 @@
   </div>
 
  
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var orderData = @json($orderData);
+        var paymentData = @json($paymentData);
+        var labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        var ctxOrders = document.getElementById('ordersChart').getContext('2d');
+        var ordersChart = new Chart(ctxOrders, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Orders',
+                    data: orderData,
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        var ctxPayments = document.getElementById('paymentsChart').getContext('2d');
+        var paymentsChart = new Chart(ctxPayments, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Payments',
+                    data: paymentData,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
